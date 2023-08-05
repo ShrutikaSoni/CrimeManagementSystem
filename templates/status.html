@@ -1,0 +1,100 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block head%}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+<link rel="stylesheet"
+  href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+  integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+
+<link rel="stylesheet" href="{% static 'css/status.css' %}">
+
+
+<style>
+  .blue{
+    background-color: #1E90FF;
+  }
+  .red{
+    background-color: #FF5C5C;
+  }
+  .green{
+    background-color: #90EE90;
+  }
+</style>
+{% endblock head %}
+{% block body %}
+
+<div class="container">
+  <div class="title">
+    <h3>Check Status</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Update Actions</h4>
+    </div>
+    <div class="col-lg-8 col-md-10 ml-auto mr-auto">
+      <div class="table-responsive">
+        <table class="table" style="background-color: rgb(218, 218, 218);">
+          <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Report Date</th>
+              <th class="text-right">Crime Date</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in reports%}
+            <tr style=" color: black; font-weight: bolder;" class="{{report.status}}">
+              <td class="text-center">{{report.id}}</td>
+              <td>{{report.name}}</td>
+              <td>{{report.title}}</td>
+              <td>{{report.report_date}}</td>
+
+              <td class="text-right">{{report.crime_date}}</td>
+              <form action="{% url 'status'%} " method="POST">
+                
+                <input type="text" name="id" value="{{report.id}}" hidden>
+                <input type="text" name="name" value="{{report.name}}" hidden>
+                <input type="text" name="title" value="{{report.title}}" hidden>
+                <input type="text" name="report_date" value="{{report.report_date}}" hidden>
+                <input type="text" name="crime_date" value="{{report.crime_date}}" hidden>
+                <input type="text" name="victim" value="{{report.victim}}" hidden>
+                <input type="text" name="description" value="{{report.description}}" hidden>
+                <input type="text" name="location" value="{{report.location}}" hidden>
+                <input type="number" name="mobile" value="{{report.mobile}}" hidden>
+                {% csrf_token %}
+                <td class="td-actions text-right">
+                  <button type="submit" rel="tooltip" name="pending" class="btn btn-info btn-round btn-just-icon btn-sm"
+                    data-original-title="" title="">
+                    <i class="material-icons">find_replace</i>
+                  </button>
+                  <button type="submit" rel="tooltip" name="completed"
+                    class="btn btn-success btn-round btn-just-icon btn-sm" data-original-title="" title="">
+                    <i class="material-icons">done</i>
+                  </button>
+                  <button type="submit" rel="tooltip" name="withdraw"
+                    class="btn btn-danger btn-round btn-just-icon btn-sm" data-original-title="" title="">
+                    <i class="material-icons">fast_rewind</i>
+                  </button>
+                </td>
+              </form>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
+
+{% endblock body %}
